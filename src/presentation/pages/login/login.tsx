@@ -6,6 +6,7 @@ const Login: React.FC = () => {
   return (
     <div className={Styles.login}>
       <LoginHeader />
+
       <form action="" className={Styles.form}>
         <h2>Login</h2>
         <Input type="email" name="email" placeholder='Digite seu e-mail' />
