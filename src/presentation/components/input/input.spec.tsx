@@ -1,5 +1,5 @@
 import React from 'react'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 import { fireEvent, render, RenderResult } from '@testing-library/react'
 import Input from './input'
 import Context from '@/presentation/contexts/form/form-context'
