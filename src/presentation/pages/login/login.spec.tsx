@@ -155,14 +155,14 @@ describe('Login component', () => {
     expect(authenticationSpy.callsCount).toBe(0)
   })
 
-  test('Should present error if Authentication fails', async () => {
-    const { sut, authenticationSpy } = makeSut()
-    const error = new InvalidCredentialsError()
-    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
-    await simulateValidSubmit(sut)
-    testElementText(sut, 'main-error', error.message)
-    testErrorWrapChildCount(sut, 1)
-  })
+  // test('Should present error if Authentication fails', async () => {
+  //   const { sut, authenticationSpy } = makeSut()
+  //   const error = new InvalidCredentialsError()
+  //   jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+  //   await simulateValidSubmit(sut)
+  //   testElementText(sut, 'main-error', error.message)
+  //   testErrorWrapChildCount(sut, 1)
+  // })
 
   test('Should add accessToken to localstorage on success', async () => {
     const { sut, authenticationSpy } = makeSut()
