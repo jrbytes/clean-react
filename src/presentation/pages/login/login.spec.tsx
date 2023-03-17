@@ -2,7 +2,8 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import faker from 'faker'
-import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
+import { render, RenderResult, fireEvent, cleanup, waitFor, act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Login } from '@/presentation/pages'
 import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
@@ -39,21 +40,23 @@ const makeSut = (params?: SutParams): SutTypes => {
 }
 
 const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.email(), password = faker.internet.password()): Promise<void> => {
-  populateEmailField(sut, email)
-  populatePasswordField(sut, password)
+  await populateEmailField(sut, email)
+  await populatePasswordField(sut, password)
+  const submitButton = sut.getByRole('button', { name: /entrar/i })
+  await userEvent.click(submitButton)
+
   const form = sut.getByTestId('form')
-  fireEvent.submit(form)
   await waitFor(() => form)
 }
 
-const populateEmailField = (sut: RenderResult, email = faker.internet.email()): void => {
+const populateEmailField = async (sut: RenderResult, email = faker.internet.email()): Promise<void> => {
   const emailInput = sut.getByTestId('email')
-  fireEvent.input(emailInput, { target: { value: email } })
+  await userEvent.type(emailInput, email)
 }
 
-const populatePasswordField = (sut: RenderResult, password = faker.internet.password()): void => {
+const populatePasswordField = async (sut: RenderResult, password = faker.internet.password()): Promise<void> => {
   const passwordInput = sut.getByTestId('password')
-  fireEvent.input(passwordInput, { target: { value: password } })
+  await userEvent.type(passwordInput, password)
 }
 
 const testStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
@@ -94,29 +97,29 @@ describe('Login component', () => {
     testStatusForField(sut, 'password', validationError)
   })
 
-  test('Should show email error if Validation fails', () => {
+  test('Should show email error if Validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    populateEmailField(sut)
+    await populateEmailField(sut)
     testStatusForField(sut, 'email', validationError)
   })
 
-  test('Should show password error if Validation fails', () => {
+  test('Should show password error if Validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    populatePasswordField(sut)
+    await populatePasswordField(sut)
     testStatusForField(sut, 'password', validationError)
   })
 
-  test('Should show valid email state if Validation success', () => {
+  test('Should show valid email state if Validation success', async () => {
     const { sut } = makeSut()
-    populateEmailField(sut)
+    await populateEmailField(sut)
     testStatusForField(sut, 'email')
   })
 
-  test('Should show valid password state if Validation success', () => {
+  test('Should show valid password state if Validation success', async () => {
     const { sut } = makeSut()
-    populatePasswordField(sut)
+    await populatePasswordField(sut)
     testStatusForField(sut, 'password')
   })
 
