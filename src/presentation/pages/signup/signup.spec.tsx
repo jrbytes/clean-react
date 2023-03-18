@@ -1,9 +1,8 @@
 import React from 'react'
 import { cleanup, render, RenderResult } from '@testing-library/react'
-import SignUp from './signup'
-import { Helper, ValidationStub } from '@/presentation/test'
 import faker from 'faker'
-import userEvent from '@testing-library/user-event'
+import { Helper, ValidationStub } from '@/presentation/test'
+import SignUp from './signup'
 
 type SutTypes = {
   sut: RenderResult
@@ -25,11 +24,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const populateField = async (sut: RenderResult, fieldName: string, value = faker.random.word()): Promise<void> => {
-  const input = sut.getByTestId(fieldName)
-  await userEvent.type(input, value)
-}
-
 describe('SignUp component', () => {
   afterEach(cleanup)
 
@@ -47,7 +41,7 @@ describe('SignUp component', () => {
   test('Should show name error if Validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    await populateField(sut, 'name')
+    await Helper.populateField(sut, 'name')
     Helper.testStatusForField(sut, 'name', validationError)
   })
 })

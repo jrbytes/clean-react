@@ -40,23 +40,13 @@ const makeSut = (params?: SutParams): SutTypes => {
 }
 
 const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.email(), password = faker.internet.password()): Promise<void> => {
-  await populateEmailField(sut, email)
-  await populatePasswordField(sut, password)
+  await Helper.populateField(sut, 'email', email)
+  await Helper.populateField(sut, 'password', password)
   const submitButton = sut.getByRole('button', { name: /entrar/i })
   await userEvent.click(submitButton)
 
   const form = sut.getByTestId('form')
   await waitFor(() => form)
-}
-
-const populateEmailField = async (sut: RenderResult, email = faker.internet.email()): Promise<void> => {
-  const emailInput = sut.getByTestId('email')
-  await userEvent.type(emailInput, email)
-}
-
-const populatePasswordField = async (sut: RenderResult, password = faker.internet.password()): Promise<void> => {
-  const passwordInput = sut.getByTestId('password')
-  await userEvent.type(passwordInput, password)
 }
 
 const testElementExists = (sut: RenderResult, fieldName: string): void => {
@@ -84,26 +74,28 @@ describe('Login component', () => {
   test('Should show email error if Validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    await populateEmailField(sut)
+    await Helper.populateField(sut, 'email')
+
     Helper.testStatusForField(sut, 'email', validationError)
   })
 
   test('Should show password error if Validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    await populatePasswordField(sut)
+    await Helper.populateField(sut, 'password')
     Helper.testStatusForField(sut, 'password', validationError)
   })
 
   test('Should show valid email state if Validation success', async () => {
     const { sut } = makeSut()
-    await populateEmailField(sut)
+    await Helper.populateField(sut, 'email')
+
     Helper.testStatusForField(sut, 'email')
   })
 
   test('Should show valid password state if Validation success', async () => {
     const { sut } = makeSut()
-    await populatePasswordField(sut)
+    await Helper.populateField(sut, 'password')
     Helper.testStatusForField(sut, 'password')
   })
 
