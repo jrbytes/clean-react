@@ -11,4 +11,11 @@ describe('CompareFieldsValidation', () => {
     const error = sut.validate(equalWord)
     expect(error).toEqual(new InvalidFieldError(equalWord))
   })
+
+  test('Should return falsy if compare is valid', () => {
+    const valueToCompare = faker.random.word()
+    const sut = makeSut(valueToCompare)
+    const error = sut.validate(valueToCompare)
+    expect(error).toBeFalsy()
+  })
 })
