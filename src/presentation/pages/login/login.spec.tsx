@@ -119,8 +119,9 @@ describe('Login component', () => {
 
   test('Should call Authentication only once', async () => {
     const { sut, authenticationSpy } = makeSut()
-    await simulateValidSubmit(sut)
-    await simulateValidSubmit(sut)
+    const submitButton = sut.getByRole('button', { name: /entrar/i })
+    await userEvent.click(submitButton)
+    await userEvent.click(submitButton)
     expect(authenticationSpy.callsCount).toBe(1)
   })
 

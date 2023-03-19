@@ -130,4 +130,12 @@ describe('SignUp component', () => {
       name, email, password, passwordConfirmation: password
     })
   })
+
+  test('Should call AddAccount only once', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const submitButton = sut.getByRole('button', { name: /entrar/i })
+    await userEvent.click(submitButton)
+    await userEvent.click(submitButton)
+    expect(addAccountSpy.callsCount).toBe(1)
+  })
 })
