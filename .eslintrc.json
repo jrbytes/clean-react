@@ -29,6 +29,7 @@
       {
         "checksVoidReturn": false
       }
-    ]
+    ],
+    "@typescript-eslint/prefer-nullish-coalescing": "off"
   }
 }

@@ -22,7 +22,7 @@ module.exports = {
       loader: 'ts-loader',
       exclude: /node_modules/
     }, {
-      test: /\.scss$/,
+      test: /\.s[ac]ss$/i,
       use: [{
         loader: 'style-loader'
       }, {
@@ -36,6 +36,7 @@ module.exports = {
     }]
   },
   devServer: {
+    port: 3000,
     static: './public',
     historyApiFallback: true,
     devMiddleware: {
