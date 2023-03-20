@@ -45,7 +45,7 @@ const simulateValidSubmit = async (sut: RenderResult, name = faker.name.findName
   await Helper.populateField(sut, 'email', email)
   await Helper.populateField(sut, 'password', password)
   await Helper.populateField(sut, 'passwordConfirmation', password)
-  const submitButton = sut.getByRole('button', { name: /entrar/i })
+  const submitButton = sut.getByRole('button', { name: /cadastrar/i })
   await userEvent.click(submitButton)
 
   const form = sut.getByTestId('form')
@@ -146,7 +146,7 @@ describe('SignUp component', () => {
 
   test('Should call AddAccount only once', async () => {
     const { sut, addAccountSpy } = makeSut()
-    const submitButton = sut.getByRole('button', { name: /entrar/i })
+    const submitButton = sut.getByRole('button', { name: /cadastrar/i })
     await userEvent.click(submitButton)
     await userEvent.click(submitButton)
     expect(addAccountSpy.callsCount).toBe(1)
