@@ -7,13 +7,15 @@
   "extends": [
     "standard-with-typescript",
     "plugin:react/recommended",
-    "plugin:cypress/recommended"
+    "plugin:cypress/recommended",
+    "plugin:prettier/recommended"
   ],
   "env": {
     "cypress/globals": true
   },
   "plugins": [
     "react",
+    "prettier",
     "cypress"
   ],
   "parserOptions": {
@@ -36,6 +38,15 @@
       }
     ],
     "@typescript-eslint/prefer-nullish-coalescing": "off",
-    "@typescript-eslint/restrict-template-expressions": "off"
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "semi": false
+      }
+    ]
   }
 }
