@@ -35,6 +35,7 @@
         "checksVoidReturn": false
       }
     ],
-    "@typescript-eslint/prefer-nullish-coalescing": "off"
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/restrict-template-expressions": "off"
   }
 }
