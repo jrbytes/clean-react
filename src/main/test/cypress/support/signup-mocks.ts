@@ -11,7 +11,7 @@ export const mockEmailInUseError = (): void => {
 }
 
 export const mockUnexpectedError = (): void => {
-  Helper.mockUnexpectedError(/login/, 'POST')
+  Helper.mockUnexpectedError(/signup/, 'POST')
 }
 
 export const mockOk = (): void => {
