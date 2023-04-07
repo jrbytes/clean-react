@@ -3,12 +3,14 @@ import faker from 'faker'
 
 export const mockHttpResponse = (): any => ({
   data: {
-    accessToken: faker.random.uuid()
+    accessToken: faker.random.uuid(),
   },
-  status: faker.random.number()
+  status: faker.random.number(),
 })
+
 export const mockAxios = (): jest.Mocked<typeof axios> => {
   const mockedAxios = axios as jest.Mocked<typeof axios>
   mockedAxios.post.mockResolvedValue(mockHttpResponse())
+  mockedAxios.get.mockResolvedValue(mockHttpResponse())
   return mockedAxios
 }
