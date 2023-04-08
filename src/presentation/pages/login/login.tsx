@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+
 import {
   Footer,
   LoginHeader,
@@ -70,7 +71,7 @@ const Login: React.FC<Props> = ({
   }
 
   return (
-    <div className={Styles.login}>
+    <div className={Styles.loginWrap}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
         <form

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { Footer, LoginHeader, Input, FormStatus, SubmitButton } from '@/presentation/components'
+
+import {
+  Footer,
+  LoginHeader,
+  Input,
+  FormStatus,
+  SubmitButton,
+} from '@/presentation/components'
 import Styles from './signup-styles.scss'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
@@ -12,7 +19,11 @@ type Props = {
   saveAccessToken: SaveAccessToken
 }
 
-const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) => {
+const SignUp: React.FC<Props> = ({
+  validation,
+  addAccount,
+  saveAccessToken,
+}) => {
   const history = useHistory()
   const [state, setState] = useState({
     isLoading: false,
@@ -25,7 +36,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
     emailError: '',
     passwordError: '',
     passwordConfirmationError: '',
-    mainError: ''
+    mainError: '',
   })
 
   useEffect(() => {
@@ -34,7 +45,10 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
     const nameError = validation.validate('name', formData)
     const emailError = validation.validate('email', formData)
     const passwordError = validation.validate('password', formData)
-    const passwordConfirmationError = validation.validate('passwordConfirmation', formData)
+    const passwordConfirmationError = validation.validate(
+      'passwordConfirmation',
+      formData
+    )
 
     setState({
       ...state,
@@ -42,11 +56,17 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
       emailError,
       passwordError,
       passwordConfirmationError,
-      isFormInvalid: !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError
+      isFormInvalid:
+        !!nameError ||
+        !!emailError ||
+        !!passwordError ||
+        !!passwordConfirmationError,
     })
   }, [state.name, state.email, state.password, state.passwordConfirmation])
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault()
     try {
       if (state.isLoading || state.isFormInvalid) {
@@ -57,7 +77,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
         name: state.name,
         email: state.email,
         password: state.password,
-        passwordConfirmation: state.passwordConfirmation
+        passwordConfirmation: state.passwordConfirmation,
       })
       await saveAccessToken.save(account.accessToken)
       history.replace('/')
@@ -67,17 +87,36 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
   }
 
   return (
-    <div className={Styles.signup}>
+    <div className={Styles.signUpWrap}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
+        <form
+          data-testid="form"
+          className={Styles.form}
+          onSubmit={handleSubmit}
+        >
           <h2>Criar Conta</h2>
-          <Input type="text" name="name" placeholder='Digite seu nome' />
-          <Input type="email" name="email" placeholder='Digite seu e-mail' />
-          <Input type="password" name="password" placeholder='Digite sua senha' />
-          <Input type="password" name="passwordConfirmation" placeholder='Repita sua senha' />
+          <Input type="text" name="name" placeholder="Digite seu nome" />
+          <Input type="email" name="email" placeholder="Digite seu e-mail" />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+          />
+          <Input
+            type="password"
+            name="passwordConfirmation"
+            placeholder="Repita sua senha"
+          />
           <SubmitButton text="Cadastrar" />
-          <Link data-testid="login-link" replace to="/login" className={Styles.link}>Voltar para Login</Link>
+          <Link
+            data-testid="login-link"
+            replace
+            to="/login"
+            className={Styles.link}
+          >
+            Voltar para Login
+          </Link>
           <FormStatus />
         </form>
       </Context.Provider>
