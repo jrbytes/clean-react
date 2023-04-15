@@ -9,13 +9,15 @@ type Props = {
 }
 
 const SurveyItem: React.FC<Props> = ({ survey }) => {
+  const iconName = survey.didAnswer ? IconName.thumbUp : IconName.thumbDown
+
   return (
     <li className={Styles.surveyItemWrap}>
       <div className={Styles.surveyContent}>
-        <Icon iconName={IconName.thumbUp} className={Styles.iconWrap} />
+        <Icon iconName={iconName} className={Styles.iconWrap} />
         <time>
           <span aria-label="day" className={Styles.day}>
-            {survey.date.getDate()}
+            {survey.date.getDate().toString().padStart(2, '0')}
           </span>
           <span aria-label="month" className={Styles.month}>
             {survey.date
