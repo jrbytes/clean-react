@@ -17,7 +17,7 @@ input[type="password"],
 input[type="text"],
 input[type="email"] {
   border: none;
-  outline: none; 
+  outline: none;
 }
 
 button {
@@ -27,6 +27,8 @@ button {
   border-radius: 8px;
   font-size: 16px;
   border: none;
+  padding: 0 16px;
+  cursor: pointer;
 
   &:hover {
     opacity: 0.9;

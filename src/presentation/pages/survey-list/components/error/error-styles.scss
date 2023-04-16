@@ -1,3 +1,14 @@
 @import '../../../../styles/colors.scss';
 
-.errorWrap {}
+.errorWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: $white;
+  padding: 40px;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px -1px $black;
+}
