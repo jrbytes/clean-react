@@ -1,5 +1,6 @@
 import React from 'react'
 import { act, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { SurveyList } from '@/presentation/pages'
 import { SurveyModel } from '@/domain/models'
@@ -63,5 +64,18 @@ describe('SurveyList Component', () => {
     await act(() => makeSut(loadSurveyListSpy))
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
     expect(screen.getByText(error.message)).toBeInTheDocument()
+  })
+
+  test('Should call LoadSurveyList on reload', async () => {
+    const loadSurveyListSpy = new LoadSurveyListSpy()
+    jest
+      .spyOn(loadSurveyListSpy, 'loadAll')
+      .mockRejectedValueOnce(new UnexpectedError())
+    await act(() => makeSut(loadSurveyListSpy))
+    await userEvent.click(
+      screen.getByRole('button', { name: /tentar novamente/i })
+    )
+    expect(loadSurveyListSpy.callsCount).toBe(1)
+    // await waitFor(() => screen.getByRole('heading', { name: /enquetes/i }))
   })
 })
