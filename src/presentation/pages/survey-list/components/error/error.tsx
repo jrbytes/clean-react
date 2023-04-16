@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import { Context } from '@/presentation/pages/survey-list/components'
-import Styles from './item-styles.scss'
+import Styles from './error-styles.scss'
 
 const Error: React.FC = () => {
   const { state, setState } = useContext(Context)

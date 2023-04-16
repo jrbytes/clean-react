@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import Styles from './item-styles.scss'
+import Styles from './list-styles.scss'
 import { SurveyModel } from '@/domain/models'
 import {
   Context,
@@ -13,7 +13,7 @@ const List: React.FC = () => {
 
   return (
     <ul className={Styles.listWrap}>
-      {state.surveys.length > 0 ? (
+      {state.surveys.length ? (
         state.surveys.map((survey: SurveyModel) => (
           <Item key={survey.id} survey={survey} />
         ))
