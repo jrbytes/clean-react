@@ -4,12 +4,15 @@ import { Context } from '@/presentation/pages/survey-list/components'
 import Styles from './item-styles.scss'
 
 const Error: React.FC = () => {
-  const { state } = useContext(Context)
+  const { state, setState } = useContext(Context)
+  const reload = (): void => {
+    setState({ surveys: [], error: '', reload: !state.reload })
+  }
 
   return (
     <div className={Styles.errorWrap}>
       {state.error}
-      <button>Recarregar</button>
+      <button onClick={reload}>Tentar novamente</button>
     </div>
   )
 }
