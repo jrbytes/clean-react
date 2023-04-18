@@ -7,7 +7,7 @@ import { ApiContext } from '@/presentation/contexts'
 
 const Header: React.FC = () => {
   const history = useHistory()
-  const { setCurrentAccount } = useContext(ApiContext)
+  const { setCurrentAccount, getCurrentAccount } = useContext(ApiContext)
   const logout = (event: MouseEvent): void => {
     event.preventDefault()
     setCurrentAccount(undefined)
@@ -19,7 +19,7 @@ const Header: React.FC = () => {
       <div className={Styles.headerContent}>
         <Logo />
         <div className={Styles.logoutWrap}>
-          <span>JrBytes</span>
+          <span>{getCurrentAccount().name}</span>
           <a href="#" onClick={logout}>
             Sair
           </a>
