@@ -14,7 +14,6 @@ describe('login', () => {
   it('should present error on UnexpectedError', () => {
     Http.mockUnexpectedError()
     cy.visit('')
-
     cy.get('div')
       .should(
         'contain.text',
@@ -28,5 +27,12 @@ describe('login', () => {
     Http.mockAccessDeniedError()
     cy.visit('')
     Helper.testUrl('/login')
+  })
+
+  it('should present correct username', () => {
+    Http.mockUnexpectedError()
+    cy.visit('')
+    const { name } = Helper.getLocalStorageItem('account')
+    cy.get('header').find('span').should('contain.text', name)
   })
 })
