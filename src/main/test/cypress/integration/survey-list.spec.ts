@@ -2,7 +2,6 @@ import faker from 'faker'
 
 import * as Helper from '../support/helpers'
 import * as Http from '../support/survey-list-mocks'
-// import {} from ''
 
 describe('login', () => {
   beforeEach(() => {
@@ -23,5 +22,11 @@ describe('login', () => {
       )
       .find('button')
       .should('contain.text', 'Tentar novamente')
+  })
+
+  it('should logout on AccessDeniedError', () => {
+    Http.mockAccessDeniedError()
+    cy.visit('')
+    Helper.testUrl('/login')
   })
 })
