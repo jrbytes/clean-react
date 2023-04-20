@@ -35,4 +35,11 @@ describe('login', () => {
     const { name } = Helper.getLocalStorageItem('account')
     cy.get('header').find('span').should('contain.text', name)
   })
+
+  it('should logout on logout link click', () => {
+    Http.mockUnexpectedError()
+    cy.visit('')
+    cy.get('header').find('a').should('contain.text', 'Sair').click()
+    Helper.testUrl('/login')
+  })
 })
