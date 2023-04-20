@@ -1,9 +1,10 @@
+import faker from 'faker'
+
 import { MinLengthValidation } from './min-length-validation'
 import { InvalidFieldError } from '@/validation/errors'
 
-import faker from 'faker'
-
-const makeSut = (field: string): MinLengthValidation => new MinLengthValidation(field, 5)
+const makeSut = (field: string): MinLengthValidation =>
+  new MinLengthValidation(field, 5)
 
 describe('MinLengthValidation', () => {
   test('Should return error if value is invalid', () => {
@@ -22,7 +23,7 @@ describe('MinLengthValidation', () => {
 
   test('Should return falsy if field does not exists in schema', () => {
     const sut = makeSut('field-one')
-    const error = sut.validate({ other: faker.random.alphaNumeric(5) })
+    const error = sut.validate({ invalid_field: faker.random.alphaNumeric(5) })
     expect(error).toBeFalsy()
   })
 })
