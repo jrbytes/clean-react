@@ -54,7 +54,7 @@ describe('RemoteLoadSurveyList', () => {
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
-  test.only('should return a list of SurveyModels if HttpGetClient returns 200', async () => {
+  test('should return a list of SurveyModels if HttpGetClient returns 200', async () => {
     const { sut, httpGetClientSpy } = makeSut()
     const httpResult = mockRemoteSurveyListModel()
     httpGetClientSpy.response = {
