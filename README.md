@@ -1,5 +1,6 @@
 [![Build Status](https://app.travis-ci.com/jrbytes/clean-react.svg?branch=main)](https://app.travis-ci.com/jrbytes/clean-react)
 [![Coverage Status](https://coveralls.io/repos/github/jrbytes/clean-react/badge.svg?branch=main)](https://coveralls.io/github/jrbytes/clean-react?branch=main)
+[![Known Vulnerabilities](https://snyk.io/test/github/jrbytes/clean-react/badge.svg)](https://snyk.io/test/github/jrbytes/clean-react)
 
 Node versão 14 configurado no nvmrc para quem utiliza nvm.
 
