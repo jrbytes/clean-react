@@ -1,12 +1,25 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
+
 import Styles from './spinner-styles.scss'
 
-type Props = React.HTMLAttributes<HTMLElement>
+type Props = React.HTMLAttributes<HTMLElement> & {
+  isNegative?: boolean
+}
 
-const Spinner: React.FC<Props> = (props: Props) => {
+const Spinner: React.FC<Props> = ({
+  isNegative,
+  className,
+  ...rest
+}: Props) => {
+  const negativeClass = isNegative ? Styles.negative : ''
+
   return (
-    // eslint-disable-next-line react/prop-types
-    <div {...props} data-testid="spinner" className={[Styles.spinner, props.className].join(' ')}>
+    <div
+      {...rest}
+      data-testid="spinner"
+      className={[Styles.spinner, negativeClass, className].join(' ')}
+    >
       <div />
       <div />
       <div />
