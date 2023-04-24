@@ -8,6 +8,7 @@ import {
   getCurrentAccountAdapter,
 } from '@/main/adapters/current-account-adapter'
 import { PrivateRoute } from '@/presentation/components'
+import { SurveyResult } from '@/presentation/pages'
 
 const Router: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const Router: React.FC = () => {
           <Route path="/login" exact component={makeLogin} />
           <Route path="/signup" exact component={makeSignUp} />
           <PrivateRoute path="/" exact component={makeSurveyList} />
+          <PrivateRoute path="/surveys" exact component={SurveyResult} />
         </Switch>
       </BrowserRouter>
     </ApiContext.Provider>
