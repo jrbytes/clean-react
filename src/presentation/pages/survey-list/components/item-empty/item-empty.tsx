@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Styles from './item-empty-styles.scss'
+import Styles from './styles.scss'
 
 const ItemEmpty: React.FC = () => {
   return (
