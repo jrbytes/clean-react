@@ -9,7 +9,7 @@ const SurveyResult: React.FC = () => {
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div className={Styles.contentWrap}>
-        {false && (
+        {true && (
           <>
             <hgroup>
               <Calendar date={new Date()} className={Styles.calendarWrap} />
@@ -20,6 +20,16 @@ const SurveyResult: React.FC = () => {
               </h2>
             </hgroup>
             <FlipMove className={Styles.answersList}>
+              <li>
+                <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
+                <span className={Styles.answer}>ReactJS</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
+              <li className={Styles.active}>
+                <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
+                <span className={Styles.answer}>ReactJS</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
               <li>
                 <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
                 <span className={Styles.answer}>ReactJS</span>
