@@ -9,22 +9,30 @@ describe('Item Component', () => {
   test('Should render with correct values', () => {
     const survey = Object.assign(mockSurveyModel(), {
       didAnswer: true,
+      date: new Date('2020-01-10T00:00:00'),
     })
     render(<Item survey={survey} />)
     expect(screen.getByRole('img')).toHaveProperty('src', IconName.thumbUp)
     expect(
       screen.getByText(survey.question, { selector: 'p' })
     ).toBeInTheDocument()
+    expect(screen.getByLabelText('day').textContent).toBe('10')
+    expect(screen.getByLabelText('month').textContent).toBe('jan')
+    expect(screen.getByLabelText('year').textContent).toBe('2020')
   })
 
   test('Should render with correct values', () => {
     const survey = Object.assign(mockSurveyModel(), {
       didAnswer: false,
+      date: new Date('2022-02-03T00:00:00'),
     })
     render(<Item survey={survey} />)
     expect(screen.getByRole('img')).toHaveProperty('src', IconName.thumbDown)
     expect(
       screen.getByText(survey.question, { selector: 'p' })
     ).toBeInTheDocument()
+    expect(screen.getByLabelText('day').textContent).toBe('03')
+    expect(screen.getByLabelText('month').textContent).toBe('fev')
+    expect(screen.getByLabelText('year').textContent).toBe('2022')
   })
 })
