@@ -16,14 +16,17 @@ type Props = {
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
-  const [state] = useState({
+  const [state, setState] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model,
   })
 
   useEffect(() => {
-    loadSurveyResult.load().then().catch()
+    loadSurveyResult
+      .load()
+      .then((surveyResult) => setState((old) => ({ ...old, surveyResult })))
+      .catch()
   }, [])
 
   return (
@@ -33,29 +36,33 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
         {state.surveyResult && (
           <>
             <hgroup>
-              <Calendar date={new Date()} className={Styles.calendarWrap} />
-              <h2>
-                Qual sua linguagem de programação favorita? Qual sua linguagem
-                de programação favorita? Qual sua linguagem de programação
-                favorita?
-              </h2>
+              <Calendar
+                date={state.surveyResult.date}
+                className={Styles.calendarWrap}
+              />
+              <h2>{state.surveyResult.question}</h2>
             </hgroup>
             <FlipMove className={Styles.answersList}>
-              <li>
-                <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
-                <span className={Styles.answer}>ReactJS</span>
-                <span className={Styles.percent}>50%</span>
-              </li>
-              <li className={Styles.active}>
-                <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
-                <span className={Styles.answer}>ReactJS</span>
-                <span className={Styles.percent}>50%</span>
-              </li>
-              <li>
-                <img src="https://legacy.reactjs.org/logo-og.png" alt="" />
-                <span className={Styles.answer}>ReactJS</span>
-                <span className={Styles.percent}>50%</span>
-              </li>
+              {state.surveyResult.answers.map((answer) => (
+                <li
+                  key={answer.answer}
+                  className={answer.isCurrentAccountAnswer ? Styles.active : ''}
+                >
+                  {answer.image && (
+                    <img
+                      src={answer.image}
+                      alt={answer.answer}
+                      aria-label="image list"
+                    />
+                  )}
+                  <span className={Styles.answer} aria-label="answer span">
+                    {answer.answer}
+                  </span>
+                  <span className={Styles.percent} aria-label="percent span">
+                    {answer.percent}%
+                  </span>
+                </li>
+              ))}
             </FlipMove>
             <button>Voltar</button>
           </>
