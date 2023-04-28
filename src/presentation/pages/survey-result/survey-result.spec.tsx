@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 
 import { SurveyResult } from '@/presentation/pages'
 import { UnexpectedError } from '@/domain/errors'
@@ -14,9 +14,7 @@ type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
 }
 
-const makeSut = (surveyResult = mockSurveyResultModel()): SutTypes => {
-  const loadSurveyResultSpy = new LoadSurveyResultSpy()
-  loadSurveyResultSpy.surveyResult = surveyResult
+const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   render(
     <ApiContext.Provider
       value={{
@@ -50,10 +48,12 @@ describe('SurveyResult Component', () => {
   })
 
   test('Should present SurveyResult data on success', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
     const surveyResult = Object.assign(mockSurveyResultModel(), {
       date: new Date('2020-01-10T00:00:00'),
     })
-    makeSut(surveyResult)
+    loadSurveyResultSpy.surveyResult = surveyResult
+    makeSut(loadSurveyResultSpy)
     await waitFor(() => screen.getByText('jan'))
     expect(screen.getByLabelText('day').textContent).toBe('10')
     expect(screen.getByLabelText('month').textContent).toBe('jan')
@@ -78,5 +78,15 @@ describe('SurveyResult Component', () => {
     expect(percents.length).toBe(2)
     expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
     expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+  })
+
+  test('Should render error on UnexpectedError', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const error = new UnexpectedError()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
+    await act(() => makeSut(loadSurveyResultSpy))
+    expect(screen.queryByText('Aguarde...')).not.toBeInTheDocument()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    expect(screen.getByText(error.message)).toBeInTheDocument()
   })
 })
