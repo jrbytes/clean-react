@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { Calendar, Icon, IconName } from '@/presentation/components'
 import Styles from './item-styles.scss'
@@ -18,7 +19,9 @@ const Item: React.FC<Props> = ({ survey }) => {
         <Calendar date={survey.date} className={Styles.calendarWrap} />
         <p>{survey.question}</p>
       </div>
-      <footer>Ver resultado</footer>
+      <footer>
+        <Link to={`/surveys/${survey.id}`}>Ver resultado</Link>
+      </footer>
     </li>
   )
 }
