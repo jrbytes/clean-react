@@ -1,12 +1,26 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory, MemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 
 import { mockSurveyModel } from '@/domain/test'
 import { Item } from '@/presentation/pages/survey-list/components'
 import { IconName } from '@/presentation/components'
+
+type SutTypes = {
+  history: MemoryHistory
+}
+
+const makeSut = (survey = mockSurveyModel()): SutTypes => {
+  const history = createMemoryHistory({ initialEntries: ['/'] })
+  render(
+    <Router history={history}>
+      <Item survey={survey} />
+    </Router>
+  )
+  return { history }
+}
 
 describe('Item Component', () => {
   test('Should render with correct values', () => {
@@ -14,7 +28,7 @@ describe('Item Component', () => {
       didAnswer: true,
       date: new Date('2020-01-10T00:00:00'),
     })
-    render(<Item survey={survey} />)
+    makeSut(survey)
     expect(screen.getByRole('img')).toHaveProperty('src', IconName.thumbUp)
     expect(
       screen.getByText(survey.question, { selector: 'p' })
@@ -29,7 +43,7 @@ describe('Item Component', () => {
       didAnswer: false,
       date: new Date('2022-02-03T00:00:00'),
     })
-    render(<Item survey={survey} />)
+    makeSut(survey)
     expect(screen.getByRole('img')).toHaveProperty('src', IconName.thumbDown)
     expect(
       screen.getByText(survey.question, { selector: 'p' })
@@ -39,14 +53,9 @@ describe('Item Component', () => {
     expect(screen.getByLabelText('year').textContent).toBe('2022')
   })
 
-  test.only('Should go to SurveyResult', async () => {
-    const history = createMemoryHistory({ initialEntries: ['/'] })
+  test('Should go to SurveyResult', async () => {
     const survey = mockSurveyModel()
-    render(
-      <Router history={history}>
-        <Item survey={survey} />
-      </Router>
-    )
+    const { history } = makeSut(survey)
     await userEvent.click(screen.getByRole('link', { name: /ver resultado/i }))
     expect(history.location.pathname).toBe(`/surveys/${survey.id}`)
   })
