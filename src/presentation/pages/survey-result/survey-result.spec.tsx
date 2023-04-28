@@ -2,6 +2,7 @@ import React from 'react'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import { MemoryHistory, createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
 
 import { SurveyResult } from '@/presentation/pages'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
@@ -112,5 +113,17 @@ describe('SurveyResult Component', () => {
     )
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(history.location.pathname).toBe('/login')
+  })
+
+  test('Should call LoadSurveyResult on reload', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    jest
+      .spyOn(loadSurveyResultSpy, 'load')
+      .mockRejectedValueOnce(new UnexpectedError())
+    await act(() => makeSut(loadSurveyResultSpy))
+    await userEvent.click(
+      screen.getByRole('button', { name: /tentar novamente/i })
+    )
+    expect(loadSurveyResultSpy.callsCount).toBe(1)
   })
 })
