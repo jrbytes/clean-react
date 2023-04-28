@@ -10,12 +10,16 @@ import {
   Error,
 } from '@/presentation/components'
 import { LoadSurveyResult } from '@/domain/usecases'
+import { useErrorHandler } from '@/presentation/hooks'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
+  const handlerError = useErrorHandler((error: Error) => [
+    setState((old) => ({ ...old, surveyResult: null, error: error.message })),
+  ])
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -26,7 +30,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     loadSurveyResult
       .load()
       .then((surveyResult) => setState((old) => ({ ...old, surveyResult })))
-      .catch()
+      .catch(handlerError)
   }, [])
 
   return (
