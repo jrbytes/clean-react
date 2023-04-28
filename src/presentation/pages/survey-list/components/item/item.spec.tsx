@@ -1,5 +1,8 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { createMemoryHistory } from 'history'
+import { Router } from 'react-router-dom'
 
 import { mockSurveyModel } from '@/domain/test'
 import { Item } from '@/presentation/pages/survey-list/components'
@@ -34,5 +37,17 @@ describe('Item Component', () => {
     expect(screen.getByLabelText('day').textContent).toBe('03')
     expect(screen.getByLabelText('month').textContent).toBe('fev')
     expect(screen.getByLabelText('year').textContent).toBe('2022')
+  })
+
+  test.only('Should go to SurveyResult', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] })
+    const survey = mockSurveyModel()
+    render(
+      <Router history={history}>
+        <Item survey={survey} />
+      </Router>
+    )
+    await userEvent.click(screen.getByRole('link', { name: /ver resultado/i }))
+    expect(history.location.pathname).toBe(`/surveys/${survey.id}`)
   })
 })
