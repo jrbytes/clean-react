@@ -68,4 +68,26 @@ describe('SurveyResult', () => {
     cy.get('header').find('a').should('contain.text', 'Sair').click()
     Helper.testUrl('/login')
   })
+
+  it('should present survey items', () => {
+    mockSuccess()
+    cy.visit('/surveys/any_id')
+    cy.get('hgroup').find('h2').should('have.text', 'Question 1')
+    cy.get('hgroup').find('[aria-label="day"]').should('have.text', '03')
+    cy.get('hgroup').find('[aria-label="month"]').should('have.text', 'fev')
+    cy.get('hgroup').find('[aria-label="year"]').should('have.text', '2018')
+    cy.get('li:nth-child(1)').then((li) => {
+      assert.equal(li.find('[aria-label="answer span"]').text(), 'any_answer')
+      assert.equal(li.find('[aria-label="percent span"]').text(), '70%')
+      assert.equal(
+        li.find('[aria-label="image list"]').attr('src'),
+        'any_image'
+      )
+    })
+    cy.get('li:nth-child(2)').then((li) => {
+      assert.equal(li.find('[aria-label="answer span"]').text(), 'any_answer_2')
+      assert.equal(li.find('[aria-label="percent span"]').text(), '30%')
+      assert.notExists(li.find('[aria-label="image list"]'))
+    })
+  })
 })
