@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 import Styles from './styles.scss'
 import { Calendar } from '@/presentation/components'
 import { LoadSurveyResult } from '@/domain/usecases'
+import { Answer } from '@/presentation/pages/survey-result/components'
 
 type Props = {
   surveyResult: LoadSurveyResult.Model
@@ -20,26 +21,11 @@ const Result: React.FC<Props> = ({ surveyResult }) => {
         <h2>{surveyResult.question}</h2>
       </hgroup>
       <FlipMove className={Styles.answersList}>
-        {surveyResult.answers.map((answer) => (
-          <li
-            key={answer.answer}
-            className={answer.isCurrentAccountAnswer ? Styles.active : ''}
-          >
-            {answer.image && (
-              <img
-                src={answer.image}
-                alt={answer.answer}
-                aria-label="image list"
-              />
-            )}
-            <span className={Styles.answer} aria-label="answer span">
-              {answer.answer}
-            </span>
-            <span className={Styles.percent} aria-label="percent span">
-              {answer.percent}%
-            </span>
-          </li>
-        ))}
+        <>
+          {surveyResult.answers.map((answer) => (
+            <Answer key={answer.answer} answer={answer} />
+          ))}
+        </>
       </FlipMove>
       <button className={Styles.button} onClick={goBack}>
         Voltar
