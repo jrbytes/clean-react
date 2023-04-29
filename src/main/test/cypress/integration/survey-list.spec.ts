@@ -12,7 +12,7 @@ const mockSuccess = (): void => {
   Http.mockOk(path, 'GET', 'fx:survey-list')
 }
 
-describe('login', () => {
+describe('SurveyList', () => {
   beforeEach(() => {
     cy.fixture('account').then((account) => {
       Helper.setLocalStorageItem('account', account)
