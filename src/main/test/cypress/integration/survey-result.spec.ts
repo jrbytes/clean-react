@@ -54,4 +54,18 @@ describe('SurveyResult', () => {
     cy.visit('/surveys/any_id')
     Helper.testUrl('/login')
   })
+
+  it('should present correct username', () => {
+    mockUnexpectedError()
+    cy.visit('/surveys/any_id')
+    const { name } = Helper.getLocalStorageItem('account')
+    cy.get('header').find('span').should('contain.text', name)
+  })
+
+  it('should logout on logout link click', () => {
+    mockUnexpectedError()
+    cy.visit('/surveys/any_id')
+    cy.get('header').find('a').should('contain.text', 'Sair').click()
+    Helper.testUrl('/login')
+  })
 })
