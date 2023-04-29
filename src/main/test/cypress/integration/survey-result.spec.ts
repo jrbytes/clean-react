@@ -90,4 +90,12 @@ describe('SurveyResult', () => {
       assert.notExists(li.find('[aria-label="image list"]'))
     })
   })
+
+  it('should go to SurveyList on back button click', () => {
+    cy.visit('/')
+    mockSuccess()
+    cy.visit('/surveys/any_id')
+    cy.get('button').should('have.text', 'Voltar').click()
+    Helper.testUrl('/')
+  })
 })
