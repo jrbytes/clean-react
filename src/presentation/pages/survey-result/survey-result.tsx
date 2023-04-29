@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import FlipMove from 'react-flip-move'
-import { useHistory } from 'react-router-dom'
 
 import Styles from './styles.scss'
-import {
-  Calendar,
-  Footer,
-  Header,
-  Loading,
-  Error,
-} from '@/presentation/components'
+import { Footer, Header, Loading, Error } from '@/presentation/components'
 import { LoadSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
+import { Result } from '@/presentation/pages/survey-result/components'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
@@ -36,8 +29,6 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
       reload: !old.reload,
     }))
 
-  const { goBack } = useHistory()
-
   useEffect(() => {
     loadSurveyResult
       .load()
@@ -49,40 +40,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div data-testid="survey-result" className={Styles.contentWrap}>
-        {state.surveyResult && (
-          <>
-            <hgroup>
-              <Calendar
-                date={state.surveyResult.date}
-                className={Styles.calendarWrap}
-              />
-              <h2>{state.surveyResult.question}</h2>
-            </hgroup>
-            <FlipMove className={Styles.answersList}>
-              {state.surveyResult.answers.map((answer) => (
-                <li
-                  key={answer.answer}
-                  className={answer.isCurrentAccountAnswer ? Styles.active : ''}
-                >
-                  {answer.image && (
-                    <img
-                      src={answer.image}
-                      alt={answer.answer}
-                      aria-label="image list"
-                    />
-                  )}
-                  <span className={Styles.answer} aria-label="answer span">
-                    {answer.answer}
-                  </span>
-                  <span className={Styles.percent} aria-label="percent span">
-                    {answer.percent}%
-                  </span>
-                </li>
-              ))}
-            </FlipMove>
-            <button onClick={goBack}>Voltar</button>
-          </>
-        )}
+        {state.surveyResult && <Result surveyResult={state.surveyResult} />}
         {state.isLoading && <Loading />}
         {state.error && <Error error={state.error} reload={reload} />}
       </div>
