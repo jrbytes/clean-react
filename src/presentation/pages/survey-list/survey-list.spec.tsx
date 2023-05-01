@@ -3,6 +3,7 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory, MemoryHistory } from 'history'
+import { RecoilRoot } from 'recoil'
 
 import { SurveyList } from '@/presentation/pages'
 import { LoadSurveyList } from '@/domain/usecases'
@@ -31,16 +32,18 @@ const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider
-      value={{
-        setCurrentAccount: setCurrentAccountMock,
-        getCurrentAccount: () => mockAccountModel(),
-      }}
-    >
-      <Router history={history}>
-        <SurveyList loadSurveyList={loadSurveyListSpy} />
-      </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider
+        value={{
+          setCurrentAccount: setCurrentAccountMock,
+          getCurrentAccount: () => mockAccountModel(),
+        }}
+      >
+        <Router history={history}>
+          <SurveyList loadSurveyList={loadSurveyListSpy} />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
   return {
     loadSurveyListSpy,
