@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryHistory, createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
@@ -180,7 +180,7 @@ describe('SurveyResult Component', () => {
     })
     await waitFor(() => screen.getByText('jan'))
     const listItem = screen.getAllByRole('listitem')
-    await userEvent.click(listItem[1])
+    await waitFor(() => fireEvent.click(listItem[1]))
     expect(screen.queryByText('Aguarde...')).toBeInTheDocument()
     expect(saveSurveyResultSpy.params).toEqual({
       answer: loadSurveyResultSpy.surveyResult.answers[1].answer,
@@ -209,5 +209,39 @@ describe('SurveyResult Component', () => {
     await userEvent.click(listItem[1])
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(history.location.pathname).toBe('/login')
+  })
+
+  test('Should present SurveyResult data on SaveSurveyResult success', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    const surveyResult = Object.assign(mockSurveyResultModel(), {
+      date: new Date('2018-02-20T00:00:00'),
+    })
+    saveSurveyResultSpy.surveyResult = surveyResult
+    makeSut({ saveSurveyResultSpy })
+    const listItem = await waitFor(() => screen.getAllByRole('listitem'))
+    await userEvent.click(listItem[1])
+    expect(screen.getByLabelText('day').textContent).toBe('20')
+    expect(screen.getByLabelText('month').textContent).toBe('fev')
+    expect(screen.getByLabelText('year').textContent).toBe('2018')
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      surveyResult.question
+    )
+    expect(listItem.length).toBe(2)
+    expect(listItem[0]).toHaveClass('active')
+    expect(listItem[1]).not.toHaveClass('active')
+    const images = screen.getAllByLabelText('image list')
+    expect(images.length).toBe(1)
+    expect(images[0]).toHaveAttribute('src', surveyResult.answers[0].image)
+    expect(images[0]).toHaveAttribute('alt', surveyResult.answers[0].answer)
+    expect(images[1]).toBeFalsy()
+    const answers = screen.getAllByLabelText('answer span')
+    expect(answers.length).toBe(2)
+    expect(answers[0]).toHaveTextContent(surveyResult.answers[0].answer)
+    expect(answers[1]).toHaveTextContent(surveyResult.answers[1].answer)
+    const percents = screen.getAllByLabelText('percent span')
+    expect(percents.length).toBe(2)
+    expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
+    expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+    expect(screen.queryByText('Aguarde...')).not.toBeInTheDocument()
   })
 })
