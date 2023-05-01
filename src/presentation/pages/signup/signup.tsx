@@ -1,17 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
-import {
-  Footer,
-  LoginHeader,
-  Input,
-  FormStatus,
-  SubmitButton,
-} from '@/presentation/components'
+import { Footer, LoginHeader } from '@/presentation/components'
 import Styles from './signup-styles.scss'
-import { FormContext, ApiContext } from '@/presentation/contexts'
+import { ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
 import { AddAccount } from '@/domain/usecases'
+import {
+  signUpState,
+  Input,
+  SubmitButton,
+  FormStatus,
+} from '@/presentation/pages/signup/components'
 
 type Props = {
   validation: Validation
@@ -21,19 +22,7 @@ type Props = {
 const SignUp: React.FC<Props> = ({ validation, addAccount }) => {
   const { setCurrentAccount } = useContext(ApiContext)
   const history = useHistory()
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-    nameError: '',
-    emailError: '',
-    passwordError: '',
-    passwordConfirmationError: '',
-    mainError: '',
-  })
+  const [state, setState] = useRecoilState(signUpState)
 
   useEffect(() => {
     validate('name')
@@ -97,37 +86,29 @@ const SignUp: React.FC<Props> = ({ validation, addAccount }) => {
   return (
     <div className={Styles.signUpWrap}>
       <LoginHeader />
-      <FormContext.Provider value={{ state, setState }}>
-        <form
-          data-testid="form"
-          className={Styles.form}
-          onSubmit={handleSubmit}
+
+      <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
+        <h2>Criar Conta</h2>
+        <Input type="text" name="name" placeholder="Digite seu nome" />
+        <Input type="email" name="email" placeholder="Digite seu e-mail" />
+        <Input type="password" name="password" placeholder="Digite sua senha" />
+        <Input
+          type="password"
+          name="passwordConfirmation"
+          placeholder="Repita sua senha"
+        />
+        <SubmitButton text="Cadastrar" />
+        <Link
+          data-testid="login-link"
+          replace
+          to="/login"
+          className={Styles.link}
         >
-          <h2>Criar Conta</h2>
-          <Input type="text" name="name" placeholder="Digite seu nome" />
-          <Input type="email" name="email" placeholder="Digite seu e-mail" />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Digite sua senha"
-          />
-          <Input
-            type="password"
-            name="passwordConfirmation"
-            placeholder="Repita sua senha"
-          />
-          <SubmitButton text="Cadastrar" />
-          <Link
-            data-testid="login-link"
-            replace
-            to="/login"
-            className={Styles.link}
-          >
-            Voltar para Login
-          </Link>
-          <FormStatus />
-        </form>
-      </FormContext.Provider>
+          Voltar para Login
+        </Link>
+        <FormStatus />
+      </form>
+
       <Footer />
     </div>
   )
