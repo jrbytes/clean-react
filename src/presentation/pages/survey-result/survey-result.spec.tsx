@@ -197,4 +197,17 @@ describe('SurveyResult Component', () => {
     expect(screen.queryByText('Aguarde...')).not.toBeInTheDocument()
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
   })
+
+  test('Should logout on AccessDeniedError', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    jest
+      .spyOn(saveSurveyResultSpy, 'save')
+      .mockRejectedValueOnce(new AccessDeniedError())
+
+    const { setCurrentAccountMock, history } = makeSut({ saveSurveyResultSpy })
+    const listItem = await waitFor(() => screen.getAllByRole('listitem'))
+    await userEvent.click(listItem[1])
+    expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
+    expect(history.location.pathname).toBe('/login')
+  })
 })
