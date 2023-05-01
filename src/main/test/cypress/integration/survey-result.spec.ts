@@ -4,7 +4,7 @@ import * as Http from '../utils/http-mocks'
 const path = /surveys/
 
 const mockLoadSuccess = (): void => {
-  Http.mockOk(path, 'GET', 'fx:survey-result')
+  Http.mockOk(path, 'GET', 'fx:load-survey-result')
 }
 
 describe('SurveyResult', () => {
@@ -72,7 +72,7 @@ describe('SurveyResult', () => {
       Helper.testUrl('/login')
     })
 
-    it('should present survey items', () => {
+    it('should present survey result', () => {
       mockLoadSuccess()
       cy.visit('/surveys/any_id')
       cy.get('hgroup').find('h2').should('have.text', 'Question 1')
@@ -113,6 +113,9 @@ describe('SurveyResult', () => {
     const mockAccessDeniedError = (): void => {
       Http.mockForbiddenError(path, 'PUT')
     }
+    const mockSaveSuccess = (): void => {
+      Http.mockOk(path, 'PUT', 'fx:save-survey-result')
+    }
 
     beforeEach(() => {
       cy.fixture('account').then((account) => {
@@ -138,6 +141,34 @@ describe('SurveyResult', () => {
       mockAccessDeniedError()
       cy.get('li:nth-child(2)').click()
       Helper.testUrl('/login')
+    })
+
+    it('should present survey result', () => {
+      mockSaveSuccess()
+      cy.get('li:nth-child(2)').click()
+      cy.get('hgroup').find('h2').should('have.text', 'Other Question')
+      cy.get('hgroup').find('[aria-label="day"]').should('have.text', '23')
+      cy.get('hgroup').find('[aria-label="month"]').should('have.text', 'mar')
+      cy.get('hgroup').find('[aria-label="year"]').should('have.text', '2020')
+      cy.get('li:nth-child(1)').then((li) => {
+        assert.equal(
+          li.find('[aria-label="answer span"]').text(),
+          'other_answer'
+        )
+        assert.equal(li.find('[aria-label="percent span"]').text(), '50%')
+        assert.equal(
+          li.find('[aria-label="image list"]').attr('src'),
+          'other_image'
+        )
+      })
+      cy.get('li:nth-child(2)').then((li) => {
+        assert.equal(
+          li.find('[aria-label="answer span"]').text(),
+          'other_answer_2'
+        )
+        assert.equal(li.find('[aria-label="percent span"]').text(), '50%')
+        assert.notExists(li.find('[aria-label="image list"]'))
+      })
     })
   })
 })
