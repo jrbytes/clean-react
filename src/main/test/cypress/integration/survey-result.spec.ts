@@ -110,6 +110,9 @@ describe('SurveyResult', () => {
     const mockUnexpectedError = (): void => {
       Http.mockServerError(path, 'PUT')
     }
+    const mockAccessDeniedError = (): void => {
+      Http.mockForbiddenError(path, 'PUT')
+    }
 
     beforeEach(() => {
       cy.fixture('account').then((account) => {
@@ -129,6 +132,12 @@ describe('SurveyResult', () => {
         )
         .find('button')
         .should('contain.text', 'Tentar novamente')
+    })
+
+    it('should logout on AccessDeniedError', () => {
+      mockAccessDeniedError()
+      cy.get('li:nth-child(2)').click()
+      Helper.testUrl('/login')
     })
   })
 })
