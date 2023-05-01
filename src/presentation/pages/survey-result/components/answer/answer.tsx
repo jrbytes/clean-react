@@ -1,17 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Styles from './styles.scss'
 import { SurveyResultAnswerModel } from '@/domain/models'
+import { Context } from '@/presentation/pages/survey-result/components'
 
 type Props = {
   answer: SurveyResultAnswerModel
 }
 
 const Answer: React.FC<Props> = ({ answer }) => {
+  const { onAnswer } = useContext(Context)
+
   const activeClassName = answer.isCurrentAccountAnswer ? Styles.active : ''
 
+  const answerClick = (event: React.MouseEvent): void => {
+    if (event.currentTarget.classList.contains(Styles.active)) return
+    onAnswer(answer.answer)
+  }
+
   return (
-    <li className={[Styles.answerWrap, activeClassName].join(' ')}>
+    <li
+      onClick={answerClick}
+      className={[Styles.answerWrap, activeClassName].join(' ')}
+    >
       {answer.image && (
         <img src={answer.image} alt={answer.answer} aria-label="image list" />
       )}

@@ -1,7 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-import { makeRemoteLoadSurveyResult } from '@/main/factories/usecases'
+import {
+  makeRemoteLoadSurveyResult,
+  makeRemoteSaveSurveyResult,
+} from '@/main/factories/usecases'
 import { SurveyResult } from '@/presentation/pages'
 
 type ParamsProp = {
@@ -10,5 +13,10 @@ type ParamsProp = {
 
 export const makeSurveyResult: React.FC = () => {
   const { id } = useParams<ParamsProp>()
-  return <SurveyResult loadSurveyResult={makeRemoteLoadSurveyResult(id)} />
+  return (
+    <SurveyResult
+      loadSurveyResult={makeRemoteLoadSurveyResult(id)}
+      saveSurveyResult={makeRemoteSaveSurveyResult(id)}
+    />
+  )
 }
