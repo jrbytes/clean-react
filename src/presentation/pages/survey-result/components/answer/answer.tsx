@@ -1,15 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useRecoilValue } from 'recoil'
 
 import Styles from './styles.scss'
 import { SurveyResultAnswerModel } from '@/domain/models'
-import { Context } from '@/presentation/pages/survey-result/components'
+import { onSurveyAnswerState } from '@/presentation/pages/survey-result/components'
 
 type Props = {
   answer: SurveyResultAnswerModel
 }
 
 const Answer: React.FC<Props> = ({ answer }) => {
-  const { onAnswer } = useContext(Context)
+  const { onAnswer } = useRecoilValue(onSurveyAnswerState)
 
   const activeClassName = answer.isCurrentAccountAnswer ? Styles.active : ''
 

@@ -1,8 +1,9 @@
 import React from 'react'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, act } from '@testing-library/react'
 import { MemoryHistory, createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
+import { RecoilRoot } from 'recoil'
 
 import { SurveyResult } from '@/presentation/pages'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
@@ -37,19 +38,21 @@ const makeSut = ({
   })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider
-      value={{
-        setCurrentAccount: setCurrentAccountMock,
-        getCurrentAccount: () => mockAccountModel(),
-      }}
-    >
-      <Router history={history}>
-        <SurveyResult
-          loadSurveyResult={loadSurveyResultSpy}
-          saveSurveyResult={saveSurveyResultSpy}
-        />
-      </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider
+        value={{
+          setCurrentAccount: setCurrentAccountMock,
+          getCurrentAccount: () => mockAccountModel(),
+        }}
+      >
+        <Router history={history}>
+          <SurveyResult
+            loadSurveyResult={loadSurveyResultSpy}
+            saveSurveyResult={saveSurveyResultSpy}
+          />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
   return {
     loadSurveyResultSpy,
@@ -180,8 +183,10 @@ describe('SurveyResult Component', () => {
     })
     await waitFor(() => screen.getByText('jan'))
     const listItem = screen.getAllByRole('listitem')
-    await waitFor(() => fireEvent.click(listItem[1]))
-    expect(screen.queryByText('Aguarde...')).toBeInTheDocument()
+    fireEvent.click(listItem[1])
+    await waitFor(() =>
+      expect(screen.queryByText('Aguarde...')).toBeInTheDocument()
+    )
     expect(saveSurveyResultSpy.params).toEqual({
       answer: loadSurveyResultSpy.surveyResult.answers[1].answer,
     })
@@ -247,9 +252,12 @@ describe('SurveyResult Component', () => {
 
   test('Should prevent multiple answer click', async () => {
     const { saveSurveyResultSpy } = makeSut()
-    const listItem = await waitFor(() => screen.getAllByRole('listitem'))
-    await waitFor(() => fireEvent.click(listItem[1]))
-    fireEvent.click(listItem[1])
+    await waitFor(() => screen.getByTestId('survey-result'))
+    const item = screen.getAllByRole('listitem')[1]
+    fireEvent.click(item)
+    await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(item)
+    await waitFor(() => screen.getByTestId('survey-result'))
     expect(saveSurveyResultSpy.callsCount).toBe(1)
   })
 })
