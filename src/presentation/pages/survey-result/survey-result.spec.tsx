@@ -141,4 +141,17 @@ describe('SurveyResult Component', () => {
     await userEvent.click(screen.getByRole('button', { name: /voltar/i }))
     expect(history.location.pathname).toBe('/')
   })
+
+  test('Should not present Loading on active answer click', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const surveyResult = Object.assign(mockSurveyResultModel(), {
+      date: new Date('2020-01-10T00:00:00'),
+    })
+    loadSurveyResultSpy.surveyResult = surveyResult
+    makeSut(loadSurveyResultSpy)
+    await waitFor(() => screen.getByText('jan'))
+    const listItem = screen.getAllByRole('listitem')
+    await userEvent.click(listItem[0])
+    expect(screen.queryByText('Aguarde...')).not.toBeInTheDocument()
+  })
 })
