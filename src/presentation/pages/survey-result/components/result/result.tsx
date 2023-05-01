@@ -1,5 +1,4 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import { useHistory } from 'react-router-dom'
 
 import Styles from './styles.scss'
@@ -20,13 +19,11 @@ const Result: React.FC<Props> = ({ surveyResult }) => {
         <Calendar date={surveyResult.date} className={Styles.calendarWrap} />
         <h2>{surveyResult.question}</h2>
       </hgroup>
-      <FlipMove className={Styles.answersList}>
-        <>
-          {surveyResult.answers.map((answer) => (
-            <Answer key={answer.answer} answer={answer} />
-          ))}
-        </>
-      </FlipMove>
+      <ul className={Styles.answersList}>
+        {surveyResult.answers.map((answer) => (
+          <Answer key={answer.answer} answer={answer} />
+        ))}
+      </ul>
       <button className={Styles.button} onClick={goBack}>
         Voltar
       </button>
