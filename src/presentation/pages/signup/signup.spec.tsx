@@ -9,8 +9,9 @@ import { RecoilRoot } from 'recoil'
 import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
 import SignUp from './signup'
 import { EmailInUseError } from '@/domain/errors'
-import { ApiContext } from '@/presentation/contexts'
 import { AddAccount } from '@/domain/usecases'
+import { mockAccountModel } from '@/domain/test'
+import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
   addAccountSpy: AddAccountSpy
@@ -27,13 +28,17 @@ const makeSut = (params?: SutParams): SutTypes => {
   validationStub.errorMessage = params?.validationError
   const addAccountSpy = new AddAccountSpy()
   const setCurrentAccountMock = jest.fn()
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: () => mockAccountModel(),
+  }
   render(
-    <RecoilRoot>
-      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-        <Router history={history}>
-          <SignUp validation={validationStub} addAccount={addAccountSpy} />
-        </Router>
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => set(currentAccountState, mockedState)}
+    >
+      <Router history={history}>
+        <SignUp validation={validationStub} addAccount={addAccountSpy} />
+      </Router>
     </RecoilRoot>
   )
   return {
