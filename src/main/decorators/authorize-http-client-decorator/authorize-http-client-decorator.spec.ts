@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import { GetStorageSpy, HttpClientSpy, mockHttpRequest } from '@/data/test'
 import { AuthorizeHttpClientDecorator } from '@/main/decorators'
@@ -33,7 +33,7 @@ describe('AuthorizeHttpClientDecorator', () => {
     const { sut, httpClientSpy } = makeSut()
     const httpRequest: HttpRequest = {
       url: faker.internet.url(),
-      method: faker.random.arrayElement(['get', 'post', 'put', 'delete']),
+      method: faker.helpers.arrayElement(['get', 'post', 'put', 'delete']),
       headers: {
         field: faker.random.words(),
       },
@@ -49,7 +49,7 @@ describe('AuthorizeHttpClientDecorator', () => {
     getStorageSpy.value = mockAccountModel()
     const httpRequest: HttpRequest = {
       url: faker.internet.url(),
-      method: faker.random.arrayElement(['get', 'post', 'put', 'delete']),
+      method: faker.helpers.arrayElement(['get', 'post', 'put', 'delete']),
     }
     await sut.request(httpRequest)
     expect(httpClientSpy.url).toBe(httpRequest.url)
@@ -65,7 +65,7 @@ describe('AuthorizeHttpClientDecorator', () => {
     const field = faker.random.words()
     const httpRequest: HttpRequest = {
       url: faker.internet.url(),
-      method: faker.random.arrayElement(['get', 'post', 'put', 'delete']),
+      method: faker.helpers.arrayElement(['get', 'post', 'put', 'delete']),
       headers: {
         field,
       },

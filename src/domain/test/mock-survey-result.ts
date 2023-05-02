@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 
@@ -13,14 +13,14 @@ export const mockSurveyResultModel = (): LoadSurveyResult.Model => ({
     {
       image: faker.internet.url(),
       answer: faker.random.words(2),
-      count: faker.random.number(),
-      percent: faker.random.number(100),
+      count: faker.datatype.number(),
+      percent: faker.datatype.number(100),
       isCurrentAccountAnswer: true,
     },
     {
       answer: faker.random.words(5),
-      count: faker.random.number(),
-      percent: faker.random.number(100),
+      count: faker.datatype.number(),
+      percent: faker.datatype.number(100),
       isCurrentAccountAnswer: false,
     },
   ],

@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import * as FormHelper from '../utils/form-helpers'
 import * as Helper from '../utils/helpers'

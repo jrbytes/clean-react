@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import {
   HttpRequest,
@@ -9,9 +9,9 @@ import {
 
 export const mockHttpRequest = (): HttpRequest => ({
   url: faker.internet.url(),
-  method: faker.random.arrayElement(['get', 'post', 'put', 'delete']),
-  body: faker.random.objectElement(),
-  headers: faker.random.objectElement(),
+  method: faker.helpers.arrayElement(['get', 'post', 'put', 'delete']),
+  body: faker.science.unit(),
+  headers: faker.science.unit(),
 })
 
 export class HttpClientSpy<R = any> implements HttpClient<R> {

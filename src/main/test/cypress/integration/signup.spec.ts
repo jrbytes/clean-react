@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import * as FormHelper from '../utils/form-helpers'
 import * as Helper from '../utils/helpers'
@@ -16,7 +16,7 @@ const mockSuccess = (): void => {
 }
 
 const populateFields = (): void => {
-  cy.getByTestId('name').focus().type(faker.name.findName())
+  cy.getByTestId('name').focus().type(faker.name.firstName())
   cy.getByTestId('email').focus().type(faker.internet.email())
   const password = faker.random.alphaNumeric(7)
   cy.getByTestId('password').focus().type(password)
@@ -73,7 +73,7 @@ describe('signup', () => {
   })
 
   it('should present valid state if form is valid', () => {
-    cy.getByTestId('name').focus().type(faker.name.findName())
+    cy.getByTestId('name').focus().type(faker.name.firstName())
     FormHelper.testInputStatus('name')
     cy.getByTestId('email').focus().type(faker.internet.email())
     FormHelper.testInputStatus('email')

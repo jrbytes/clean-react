@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 import { createMemoryHistory } from 'history'
 import userEvent from '@testing-library/user-event'
 
@@ -39,7 +39,7 @@ const makeSut = (params?: SutParams): SutTypes => {
 }
 
 const simulateValidSubmit = async (
-  name = faker.name.findName(),
+  name = faker.name.firstName(),
   email = faker.internet.email(),
   password = faker.internet.password()
 ): Promise<void> => {
@@ -135,7 +135,7 @@ describe('SignUp component', () => {
 
   test('Should call AddAccount wih correct values', async () => {
     const { addAccountSpy } = makeSut()
-    const name = faker.name.findName()
+    const name = faker.name.firstName()
     const email = faker.internet.email()
     const password = faker.internet.password()
     await simulateValidSubmit(name, email, password)

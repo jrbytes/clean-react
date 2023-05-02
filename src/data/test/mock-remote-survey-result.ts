@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import { RemoteLoadSurveyResult } from '@/data/usecases'
 
@@ -10,15 +10,15 @@ export const mockRemoteSurveyResultModel =
       {
         image: faker.internet.url(),
         answer: faker.random.word(),
-        count: faker.random.number(),
-        percent: faker.random.number(100),
-        isCurrentAccountAnswer: faker.random.boolean(),
+        count: faker.datatype.number(),
+        percent: faker.datatype.number(100),
+        isCurrentAccountAnswer: faker.datatype.boolean(),
       },
       {
         answer: faker.random.word(),
-        count: faker.random.number(),
-        percent: faker.random.number(100),
-        isCurrentAccountAnswer: faker.random.boolean(),
+        count: faker.datatype.number(),
+        percent: faker.datatype.number(100),
+        isCurrentAccountAnswer: faker.datatype.boolean(),
       },
     ],
   })

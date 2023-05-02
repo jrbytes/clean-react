@@ -1,5 +1,5 @@
 import { createMemoryHistory } from 'history'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 import { fireEvent, waitFor, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 

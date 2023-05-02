@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 import { RemoteAuthentication } from './remote-authentication'
 import { HttpClientSpy } from '@/data/test'
