@@ -39,6 +39,14 @@ describe('login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
+  it('should reset state on page load', () => {
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    FormHelper.testInputStatus('email')
+    cy.getByTestId('signup-link').click()
+    cy.getByTestId('login-link').click()
+    FormHelper.testInputStatus('email', 'Campo obrigatório')
+  })
+
   it('should present error state if form is invalid', () => {
     cy.getByTestId('email').focus().type(faker.random.word())
     FormHelper.testInputStatus('email', 'O campo email é inválido')
@@ -87,12 +95,12 @@ describe('login', () => {
     populateFields()
     cy.getByTestId('submit').dblclick()
     cy.wait('@request')
-    Helper.testHttpCallsCount(1)
+    cy.get('@request.all').should('have.length', 1)
   })
 
   it('should not call submit if form is invalid', () => {
     mockSuccess()
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
-    Helper.testHttpCallsCount(0)
+    cy.get('@request.all').should('have.length', 0)
   })
 })
