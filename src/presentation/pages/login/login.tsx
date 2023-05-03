@@ -45,28 +45,29 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     }))
   }
 
-  const handleSubmit = useCallback(async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault()
-    try {
-      if (!state.isLoading || !state.isFormInvalid) {
-        setState((old) => ({ ...old, isLoading: true }))
-        const account = await authentication.auth({
-          email: state.email,
-          password: state.password,
-        })
-        setCurrentAccount(account)
-        history.replace('/')
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      event.preventDefault()
+      try {
+        if (!state.isLoading || !state.isFormInvalid) {
+          setState((old) => ({ ...old, isLoading: true }))
+          const account = await authentication.auth({
+            email: state.email,
+            password: state.password,
+          })
+          setCurrentAccount(account)
+          history.replace('/')
+        }
+      } catch (error) {
+        setState((old) => ({
+          ...old,
+          isLoading: false,
+          mainError: error.message,
+        }))
       }
-    } catch (error) {
-      setState((old) => ({
-        ...old,
-        isLoading: false,
-        mainError: error.message,
-      }))
-    }
-  }, [])
+    },
+    []
+  )
 
   return (
     <div className={Styles.loginWrap}>

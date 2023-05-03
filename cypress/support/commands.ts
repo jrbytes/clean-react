@@ -8,4 +8,6 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-Cypress.Commands.add('getByTestId', (id) => { cy.get(`[data-testid=${id}]`) })
+Cypress.Commands.add('getByTestId', (id) => {
+  cy.get(`[data-testid=${id}]`)
+})

@@ -19,7 +19,7 @@
     "cypress"
   ],
   "parserOptions": {
-    "project": "./tsconfig-eslint.json"
+    "project": ["./tsconfig-eslint.json", "./tsconfig-cypress.json"]
   },
   "rules": {
     "import/order": ["error", {
@@ -55,6 +55,8 @@
         "trailingComma": "es5",
         "semi": false
       }
-    ]
+    ],
+    "cypress/unsafe-to-chain-command": "off",
+    "@typescript-eslint/triple-slash-reference": "off"
   }
 }

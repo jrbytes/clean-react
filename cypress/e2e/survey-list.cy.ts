@@ -65,9 +65,13 @@ describe('SurveyList', () => {
   it('should logout on logout link click', () => {
     mockUnexpectedError()
     cy.visit('')
-    cy.get('header').find('a').should('contain.text', 'Sair').click().then(() => {
-      Helper.testUrl('/login')
-    })
+    cy.get('header')
+      .find('a')
+      .should('contain.text', 'Sair')
+      .click()
+      .then(() => {
+        Helper.testUrl('/login')
+      })
   })
 
   it('should present survey items', () => {
