@@ -1,10 +1,10 @@
 import * as Helper from '../utils/helpers'
 import * as Http from '../utils/http-mocks'
 
-const path = /surveys/
+const path = /api\/surveys/
 
 const mockLoadSuccess = (): void => {
-  Http.mockOk(path, 'GET', 'fx:load-survey-result')
+  Http.mockOk(path, 'GET', 'load-survey-result')
 }
 
 describe('SurveyResult', () => {
@@ -114,7 +114,7 @@ describe('SurveyResult', () => {
       Http.mockForbiddenError(path, 'PUT')
     }
     const mockSaveSuccess = (): void => {
-      Http.mockOk(path, 'PUT', 'fx:save-survey-result')
+      Http.mockOk(path, 'PUT', 'save-survey-result')
     }
 
     beforeEach(() => {

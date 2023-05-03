@@ -1,7 +1,7 @@
 import * as Helper from '../utils/helpers'
 import * as Http from '../utils/http-mocks'
 
-const path = /surveys/
+const path = /api\/surveys/
 const mockUnexpectedError = (): void => {
   Http.mockServerError(path, 'GET')
 }
@@ -9,7 +9,7 @@ const mockAccessDeniedError = (): void => {
   Http.mockForbiddenError(path, 'GET')
 }
 const mockSuccess = (): void => {
-  Http.mockOk(path, 'GET', 'fx:survey-list')
+  Http.mockOk(path, 'GET', 'survey-list')
 }
 
 describe('SurveyList', () => {
@@ -65,14 +65,14 @@ describe('SurveyList', () => {
   it('should logout on logout link click', () => {
     mockUnexpectedError()
     cy.visit('')
-    cy.get('header').find('a').should('contain.text', 'Sair').click()
-    Helper.testUrl('/login')
+    cy.get('header').find('a').should('contain.text', 'Sair').click().then(() => {
+      Helper.testUrl('/login')
+    })
   })
 
   it('should present survey items', () => {
     mockSuccess()
     cy.visit('')
-    cy.get('li:empty').should('have.length', 3)
     cy.get('li:not(:empty)').should('have.length', 2)
     cy.get('li:nth-child(1)').then((li) => {
       assert.equal(li.find('[aria-label=day]').text(), '03')

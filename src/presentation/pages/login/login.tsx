@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
@@ -45,21 +45,20 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     }))
   }
 
-  const handleSubmit = async (
+  const handleSubmit = useCallback(async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault()
     try {
-      if (state.isLoading || state.isFormInvalid) {
-        return
+      if (!state.isLoading || !state.isFormInvalid) {
+        setState((old) => ({ ...old, isLoading: true }))
+        const account = await authentication.auth({
+          email: state.email,
+          password: state.password,
+        })
+        setCurrentAccount(account)
+        history.replace('/')
       }
-      setState((old) => ({ ...old, isLoading: true }))
-      const account = await authentication.auth({
-        email: state.email,
-        password: state.password,
-      })
-      setCurrentAccount(account)
-      history.replace('/')
     } catch (error) {
       setState((old) => ({
         ...old,
@@ -67,7 +66,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         mainError: error.message,
       }))
     }
-  }
+  }, [])
 
   return (
     <div className={Styles.loginWrap}>
